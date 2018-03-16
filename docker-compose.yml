@@ -6,6 +6,10 @@ services:
     build:
       context: enerknol
       dockerfile: Dockerfile
+    links:
+      - elastic:elastic
+      - mongo:mongo
+      - mysql:mysql
     ports:
       - 5000:5000
 

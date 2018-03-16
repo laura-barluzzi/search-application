@@ -8,8 +8,11 @@ ADD enerknol/ /app/enerknol
 
 WORKDIR /app
 
-ENV FLASK_APP="/app/enerknol/app.py"
+ENV FLASK_CONFIG_DEBUG="True"
+ENV FLASK_CONFIG_SQLALCHEMY_DATABASE_URI="sqlite:////app/test.db"
+ENV FLASK_CONFIG_PASSWORD_SALT="changeme-salt"
+ENV FLASK_CONFIG_SECRET_KEY="changeme-secret-key"
 
-CMD ["flask", "run", "--port=5000", "--host=0.0.0.0"]
+CMD ["gunicorn", "--workers=2", "--bind=0.0.0.0:5000", "--log-level=debug", "enerknol.app:app"]
 
 EXPOSE 5000
