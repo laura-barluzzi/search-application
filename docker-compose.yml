@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+
+  enerknol:
+    build:
+      context: enerknol
+      dockerfile: Dockerfile
+    ports:
+      - 5000:5000
+
+  mongo:
+    image: mongo:3.6
+    ports:
+      - 27017:27017
+
+  elastic:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.2
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=enerknol
+      - MYSQL_USER=enerknol
+      - MYSQL_PASSWORD=enerknol
+      - MYSQL_ROOT_PASSWORD=root123
+    ports:
+      - 3306:3306
