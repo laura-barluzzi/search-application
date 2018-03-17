@@ -1,3 +1,5 @@
+from secrets import token_hex
+
 from elasticsearch_dsl import DocType
 from elasticsearch_dsl import Text
 from flask_mongoengine import MongoEngine
@@ -30,6 +32,8 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(255), unique=True)
     user_name = db.Column(db.String(255), unique=True)
+    access_token = db.Column(db.String(255), unique=True, index=True,
+                             default=lambda: token_hex(127))
     first_name = db.Column(db.String(255))
     last_name = db.Column(db.String(255))
     password = db.Column(db.String(255))

@@ -1,3 +1,5 @@
+from functools import lru_cache
+from functools import wraps
 from logging import getLogger
 
 from elasticsearch_dsl import Search
@@ -40,6 +42,26 @@ security = Security(app, user_datastore,
 models.mongo.init_app(app)
 
 
+def token_required(decorated_view):
+    @lru_cache(maxsize=256)
+    def user_exists(access_token):
+        user = models.User.query.filter_by(access_token=access_token).first()
+        return user is not None
+
+    @wraps(decorated_view)
+    def decorator(*args, **kwargs):
+        access_token = request.headers.get('X-Access-Token')
+        if not access_token:
+            return jsonify(status='error', message='Missing auth token'), 403
+
+        if not user_exists(access_token):
+            return jsonify(status='error', message='Unknown user'), 403
+
+        return decorated_view(*args, **kwargs)
+
+    return decorator
+
+
 @app.before_first_request
 def setup_database():
     models.db.create_all()
@@ -65,6 +87,7 @@ def document(document_id):
 
 
 @app.route('/api/documents', methods=['POST'])
+@token_required
 def post_document():
     request_json = request.get_json(silent=True)
     if not request_json:
@@ -84,6 +107,7 @@ def post_document():
 
 
 @app.route('/api/documents/search/<query>')
+@token_required
 def get_search_results(query):
     offset = int(request.args.get('offset', '0'))
     limit = int(request.args.get('limit', '20'))

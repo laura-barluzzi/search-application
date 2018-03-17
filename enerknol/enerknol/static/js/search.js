@@ -68,6 +68,7 @@ $(document).ready(function() {
         'offset': searchOffset,
         'limit': SEARCH_LIMIT
       }),
+      headers: { 'X-Access-Token': window.ACCESS_TOKEN },
       success: function(response) {
         displaySearchResults(response.results);
         updatePaginationButtonState(response.results.length);

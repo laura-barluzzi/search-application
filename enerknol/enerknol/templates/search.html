@@ -17,6 +17,7 @@
 
 {% block scripts %}
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+<script>var ACCESS_TOKEN = '{{ current_user.access_token }}';</script>
 <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endblock %}
 
