@@ -10,6 +10,8 @@ services:
       - elastic:elastic
       - mongo:mongo
       - mysql:mysql
+    environment:
+      - FLASK_CONFIG_SQLALCHEMY_DATABASE_URI=mysql+cymysql://root:root123@mysql:3306/enerknol?charset=utf8
     ports:
       - 5000:5000
 
