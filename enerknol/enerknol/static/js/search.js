@@ -3,12 +3,15 @@ $(document).ready(function() {
   var SEARCH_DEBOUNCE_MS = 250;
   var searchOffset = 0;
 
+  var $error = $('#error');
   var $nextPage = $('#next-page');
   var $previousPage = $('#previous-page');
   var $results = $('#results');
   var $search = $('#search');
 
   function displaySearchResults(results) {
+    $error.addClass('hidden');
+
     if (!results || !results.length) {
       $('#results').text('No results were found :(');
       return;
@@ -71,6 +74,7 @@ $(document).ready(function() {
       },
       error: function(error) {
         console.error(error);
+        $error.text('Error executing search.').removeClass('hidden');
       }
     });
   }
