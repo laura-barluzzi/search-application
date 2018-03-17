@@ -1,5 +1,50 @@
 {% extends 'base.html' %}
 
 {% block content %}
-Welcome to the app.
+  {% if not current_user.is_authenticated %}
+    Welcome to the app.
+  {% else %}
+    <div class="form-group">
+      <label for="search">Search in documents:</label>
+      <input type="search" class="form-control" id="search">
+    </div>
+    <div id="error"/>
+    <div id="results"/>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
+<script>
+$(document).ready(function() {
+  function displaySearchResults(results) {
+    if (!results || !results.length) {
+      $('#results').text('No results were found :(');
+      return;
+    }
+    var $resultsList = $('<ol/>');
+    $.each(results, function(i, result) {
+      $('<a/>').text(result).appendTo($('<li/>').appendTo($resultsList));
+    });
+    $('#results').html($resultsList.html());
+  }
+
+  $('#search').keyup($.debounce(250, function(e) {
+    var query = e.target.value;
+    if (!query || !query.length) {
+      return;
+    }
+    $.ajax({
+      dataType: "json",
+      url: Flask.url_for("get_search_results", {"query": query}),
+      success: function(response) {
+        displaySearchResults(response.results);
+      },
+      error: function(error) {
+        console.error(error);
+      }
+    });
+  }));
+});
+</script>
 {% endblock %}

@@ -6,6 +6,7 @@ from flask import Flask
 from flask import jsonify
 from flask import render_template
 from flask import request
+from flask_jsglue import JSGlue
 from flask_security import LoginForm
 from flask_security import SQLAlchemyUserDatastore
 from flask_security import Security
@@ -18,6 +19,9 @@ from enerknol.forms import RegisterForm
 
 app = Flask(__name__)
 app.config.from_object(config)
+
+# from https://goo.gl/JRA5Zi
+jsglue = JSGlue(app)
 
 # from https://goo.gl/v9VnRp
 connections.create_connection(hosts=config.ELASTIC_HOSTS)
