@@ -1,9 +1,10 @@
+from flask_mongoengine import MongoEngine
 from flask_security import RoleMixin
 from flask_security import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
-
 db = SQLAlchemy()
+mongo = MongoEngine()
 
 
 class RolesUsers(db.Model):
@@ -33,3 +34,7 @@ class User(db.Model, UserMixin):
     active = db.Column(db.Boolean())
     roles = db.relationship('Role', secondary='roles_users',
                             backref=db.backref('users', lazy='dynamic'))
+
+
+class Document(mongo.Document):
+    content = mongo.StringField(required=True)
