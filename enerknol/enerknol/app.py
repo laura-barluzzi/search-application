@@ -79,10 +79,10 @@ def get_document(document_id):
 @app.route('/api/documents/search/<query>')
 def get_search_results(query):
     offset = int(request.args.get('offset', '0'))
-    size = int(request.args.get('size', '20'))
+    limit = int(request.args.get('limit', '20'))
 
     search = Search().source(['id']).query('match', content=query)
-    search = search[offset:offset+size]
+    search = search[offset:offset+limit]
     results = [result.id for result in search.execute()]
 
     return jsonify(status='success', results=results), 200
