@@ -1,5 +1,7 @@
 from logging import getLogger
 
+from elasticsearch_dsl.connections import connections
+from elasticsearch_dsl import Search
 from flask import Flask
 from flask import jsonify
 from flask import render_template
@@ -16,6 +18,9 @@ from enerknol.forms import RegisterForm
 
 app = Flask(__name__)
 app.config.from_object(config)
+
+# from https://goo.gl/v9VnRp
+connections.create_connection(hosts=config.ELASTIC_HOSTS)
 
 # from https://goo.gl/U5ktnS and https://goo.gl/EextKx
 models.db.init_app(app)
@@ -51,7 +56,8 @@ def ingest():
     document = models.Document(content=document_text).save()
     document_id = str(document.id)
 
-    # put to elastic
+    # from https://goo.gl/v9VnRp
+    models.DocumentIndex(id=document_id, content=document_text).save()
 
     return jsonify(status='created', document_id=document_id), 201
 
@@ -64,6 +70,18 @@ def get_document(document_id):
         return jsonify(status='error', message='Document not found'), 404
 
     return jsonify(status='success', content=document.content), 200
+
+
+@app.route('/api/documents/search/<query>')
+def get_search_results(query):
+    offset = int(request.args.get('offset', '0'))
+    size = int(request.args.get('size', '20'))
+
+    search = Search().source(['id']).query('match', content=query)
+    search = search[offset:offset+size]
+    results = [result.id for result in search.execute()]
+
+    return jsonify(status='success', results=results), 200
 
 
 if __name__ == '__main__':

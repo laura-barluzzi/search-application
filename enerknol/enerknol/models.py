@@ -1,3 +1,5 @@
+from elasticsearch_dsl import DocType
+from elasticsearch_dsl import Text
 from flask_mongoengine import MongoEngine
 from flask_security import RoleMixin
 from flask_security import UserMixin
@@ -38,3 +40,12 @@ class User(db.Model, UserMixin):
 
 class Document(mongo.Document):
     content = mongo.StringField(required=True)
+
+
+# from https://goo.gl/v9VnRp
+class DocumentIndex(DocType):
+    id = Text()
+    content = Text()
+
+    class Meta:
+        index = 'documents'
