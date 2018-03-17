@@ -42,12 +42,13 @@ security = Security(app, user_datastore,
 models.mongo.init_app(app)
 
 
-def token_required(decorated_view):
-    @lru_cache(maxsize=256)
-    def user_exists(access_token):
-        user = models.User.query.filter_by(access_token=access_token).first()
-        return user is not None
+@lru_cache(maxsize=256)
+def user_exists(access_token):
+    user = models.User.query.filter_by(access_token=access_token).first()
+    return user is not None
 
+
+def token_required(decorated_view):
     @wraps(decorated_view)
     def decorator(*args, **kwargs):
         access_token = request.headers.get('X-Access-Token')
