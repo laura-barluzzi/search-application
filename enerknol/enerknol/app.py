@@ -44,7 +44,7 @@ def index():
 
 
 @app.route('/api/documents', methods=['POST'])
-def ingest():
+def post_document():
     request_json = request.get_json(silent=True)
     if not request_json:
         return jsonify(status='error', message='Request is not JSON'), 400
