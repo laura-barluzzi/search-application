@@ -17,8 +17,8 @@ from mongoengine import DoesNotExist
 from mongoengine import ValidationError
 
 from enerknol import config
+from enerknol import forms
 from enerknol import models
-from enerknol.forms import RegisterForm
 
 app = Flask(__name__)
 app.config.from_object(config)
@@ -33,7 +33,7 @@ connections.create_connection(hosts=config.ELASTIC_HOSTS)
 models.db.init_app(app)
 user_datastore = SQLAlchemyUserDatastore(models.db, models.User, models.Role)
 security = Security(app, user_datastore,
-                    login_form=LoginForm, register_form=RegisterForm)
+                    login_form=LoginForm, register_form=forms.RegisterForm)
 
 
 # from https://goo.gl/MjecbL
@@ -53,6 +53,17 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/document/<document_id>')
+@login_required
+def document(document_id):
+    try:
+        doc = models.Document.objects.get(id=document_id)
+    except (DoesNotExist, ValidationError):
+        return abort(404, 'Document not found')
+
+    return render_template('document.html', document=doc)
+
+
 @app.route('/api/documents', methods=['POST'])
 def post_document():
     request_json = request.get_json(silent=True)
@@ -70,17 +81,6 @@ def post_document():
     models.DocumentIndex(id=doc_id, content=document_text).save()
 
     return jsonify(status='created', document_id=doc_id), 201
-
-
-@app.route('/document/<document_id>')
-@login_required
-def document(document_id):
-    try:
-        doc = models.Document.objects.get(id=document_id)
-    except (DoesNotExist, ValidationError):
-        return abort(404, 'Document not found')
-
-    return render_template('document.html', document=doc)
 
 
 @app.route('/api/documents/search/<query>')
