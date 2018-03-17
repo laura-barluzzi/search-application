@@ -2,10 +2,19 @@ version: '3'
 
 services:
 
+  nginx:
+    build:
+      context: enerknol
+      dockerfile: Dockerfile-nginx
+    links:
+      - enerknol:enerknol
+    ports:
+      - ${PORT}:80
+
   enerknol:
     build:
       context: enerknol
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile-flask
     links:
       - elastic:elastic
       - mongo:mongo
@@ -15,7 +24,7 @@ services:
       - FLASK_CONFIG_MONGO_DATABASE_URI=mongodb://mongo:27017/enerknol
       - FLASK_CONFIG_ELASTIC_URI=http://elastic:9200
     ports:
-      - 5000:5000
+      - 5000:80
 
   mongo:
     image: mongo:3.6
