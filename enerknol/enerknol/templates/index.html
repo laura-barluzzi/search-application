@@ -8,8 +8,8 @@
       <label for="search">Search in documents:</label>
       <input type="search" class="form-control" id="search">
     </div>
-    <div id="error"/>
-    <div id="results"/>
+    <div id="error"></div>
+    <div id="results"></div>
 {% endif %}
 {% endblock %}
 
@@ -22,10 +22,14 @@ $(document).ready(function() {
       $('#results').text('No results were found :(');
       return;
     }
-    var $resultsList = $('<ol/>');
+
+    var $resultsList = $('<ol />');
     $.each(results, function(i, result) {
-      $('<a/>').text(result).appendTo($('<li/>').appendTo($resultsList));
+      $('<a />').text(result).appendTo(
+        $('<li />').appendTo(
+          $resultsList));
     });
+
     $('#results').html($resultsList.html());
   }
 
@@ -34,6 +38,7 @@ $(document).ready(function() {
     if (!query || !query.length) {
       return;
     }
+
     $.ajax({
       dataType: "json",
       url: Flask.url_for("get_search_results", {"query": query}),
