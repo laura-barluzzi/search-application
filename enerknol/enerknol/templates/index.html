@@ -1,33 +1,5 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  {% if not current_user.is_authenticated %}
-    Welcome to the app.
-  {% else %}
-    <div class="form-group">
-      <label for="search">Search in documents:</label>
-      <input type="search" class="form-control" id="search">
-    </div>
-    <div id="error"></div>
-    <div id="results"></div>
-    <nav>
-      <ul class="pager">
-        <li class="disabled"><a href="#" id="previous-page">Previous</a></li>
-        <li class="disabled"><a href="#" id="next-page">Next</a></li>
-      </ul>
-    </nav>
-{% endif %}
-{% endblock %}
-
-{% block scripts %}
-{% if current_user.is_authenticated %}
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-throttle-debounce/1.1/jquery.ba-throttle-debounce.min.js"></script>
-  <script src="{{ url_for('static', filename='js/search.js') }}"></script>
-{% endif %}
-{% endblock %}
-
-{% block styles %}
-{% if current_user.is_authenticated %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
-{% endif %}
+Please log in to start searching documents.
 {% endblock %}

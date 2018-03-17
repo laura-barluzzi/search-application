@@ -1,17 +1,18 @@
 from logging import getLogger
 
-from elasticsearch_dsl.connections import connections
 from elasticsearch_dsl import Search
+from elasticsearch_dsl.connections import connections
 from flask import Flask
 from flask import abort
 from flask import jsonify
 from flask import render_template
 from flask import request
 from flask_jsglue import JSGlue
-from flask_security import login_required
 from flask_security import LoginForm
 from flask_security import SQLAlchemyUserDatastore
 from flask_security import Security
+from flask_security import current_user
+from flask_security import login_required
 from mongoengine import DoesNotExist
 from mongoengine import ValidationError
 
@@ -46,6 +47,9 @@ def setup_database():
 
 @app.route('/')
 def index():
+    if current_user.is_authenticated:
+        return render_template('search.html')
+
     return render_template('index.html')
 
 
