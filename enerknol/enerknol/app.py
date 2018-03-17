@@ -3,10 +3,12 @@ from logging import getLogger
 from elasticsearch_dsl.connections import connections
 from elasticsearch_dsl import Search
 from flask import Flask
+from flask import abort
 from flask import jsonify
 from flask import render_template
 from flask import request
 from flask_jsglue import JSGlue
+from flask_security import login_required
 from flask_security import LoginForm
 from flask_security import SQLAlchemyUserDatastore
 from flask_security import Security
@@ -57,23 +59,24 @@ def post_document():
     if not document_text:
         return jsonify(status='error', message='Missing key: document'), 400
 
-    document = models.Document(content=document_text).save()
-    document_id = str(document.id)
+    doc = models.Document(content=document_text).save()
+    doc_id = str(doc.id)
 
     # from https://goo.gl/v9VnRp
-    models.DocumentIndex(id=document_id, content=document_text).save()
+    models.DocumentIndex(id=doc_id, content=document_text).save()
 
-    return jsonify(status='created', document_id=document_id), 201
+    return jsonify(status='created', document_id=doc_id), 201
 
 
-@app.route('/api/documents/<document_id>')
-def get_document(document_id):
+@app.route('/document/<document_id>')
+@login_required
+def document(document_id):
     try:
-        document = models.Document.objects.get(id=document_id)
+        doc = models.Document.objects.get(id=document_id)
     except (DoesNotExist, ValidationError):
-        return jsonify(status='error', message='Document not found'), 404
+        return abort(404, 'Document not found')
 
-    return jsonify(status='success', content=document.content), 200
+    return render_template('document.html', document=doc)
 
 
 @app.route('/api/documents/search/<query>')

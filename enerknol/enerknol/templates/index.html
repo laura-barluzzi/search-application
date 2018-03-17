@@ -25,3 +25,9 @@
   <script src="{{ url_for('static', filename='js/search.js') }}"></script>
 {% endif %}
 {% endblock %}
+
+{% block styles %}
+{% if current_user.is_authenticated %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+{% endif %}
+{% endblock %}

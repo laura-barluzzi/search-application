@@ -16,9 +16,12 @@ $(document).ready(function() {
 
     var $resultsList = $('<ol />');
     $.each(results, function(i, result) {
-      $('<a />').text(result).appendTo(
-        $('<li />').appendTo(
-          $resultsList));
+      $('<li />')
+      .appendTo($resultsList)
+      .append($('<a />')
+        .attr('href', Flask.url_for('document', { 'document_id': result }))
+        .attr('target', '_blank')
+        .text(result));
     });
 
     $results.html($resultsList.html());
