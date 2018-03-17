@@ -109,8 +109,8 @@ def post_document():
 @app.route('/api/documents/search/<query>')
 @token_required
 def get_search_results(query):
-    offset = int(request.args.get('offset', '0'))
-    limit = int(request.args.get('limit', '20'))
+    offset = max(int(request.args.get('offset', '0')), 0)
+    limit = min(int(request.args.get('limit', '20')), 100)
 
     search = Search().source(['id']).query('match', content=query)
     search = search[offset:offset+limit]
