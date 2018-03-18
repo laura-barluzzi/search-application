@@ -32,3 +32,12 @@ MYSQL_ROOT_PASSWORD=changeme
 ```
 
 Remember to update all the `changeme` placeholders to secure random values!
+
+## Running tests
+
+There are end-to-end tests for the project which can be run with:
+
+```bash
+pip3 install requests
+python3 test.py
+```

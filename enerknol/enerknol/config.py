@@ -1,6 +1,7 @@
 from os import getenv
 
 DEBUG = getenv('FLASK_CONFIG_DEBUG') == "True"
+TESTING = getenv('FLASK_CONFIG_TESTING') == "True"
 SECRET_KEY = getenv('FLASK_CONFIG_SECRET_KEY')
 
 MONGODB_SETTINGS = {'host': getenv('FLASK_CONFIG_MONGO_DATABASE_URI')}
@@ -18,3 +19,7 @@ SECURITY_SEND_REGISTER_EMAIL = False
 SECURITY_LOGIN_URL = '/user/login'
 SECURITY_LOGOUT_URL = '/user/logout'
 SECURITY_REGISTER_URL = '/user/register'
+
+TEST_USER_EMAIL = 'user@test.com'
+TEST_USER_PASSWORD = 'password123'
+TEST_USER_ACCESS_TOKEN = 'test-access-token'

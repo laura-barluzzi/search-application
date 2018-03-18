@@ -67,6 +67,19 @@ def token_required(decorated_view):
 def setup_database():
     models.db.create_all()
 
+    if app.config['TESTING']:
+        test_user_email = app.config['TEST_USER_EMAIL']
+        test_user_password = app.config['TEST_USER_PASSWORD']
+        test_user_access_token = app.config['TEST_USER_ACCESS_TOKEN']
+
+        user = user_datastore.find_user(email=test_user_email)
+        if not user:
+            user_datastore.create_user(
+                email=test_user_email,
+                password=test_user_password,
+                access_token=test_user_access_token)
+            user_datastore.commit()
+
 
 @app.route('/')
 def index():
