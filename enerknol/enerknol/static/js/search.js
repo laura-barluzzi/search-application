@@ -19,8 +19,6 @@ $(document).ready(function() {
       return;
     }
 
-    console.log(results);
-
     var $resultsList = $('<ol />');
     $.each(results, function(i, result) {
       var linkContent = '';
