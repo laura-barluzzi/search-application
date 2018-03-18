@@ -2,6 +2,7 @@ $(document).ready(function() {
   var SEARCH_LIMIT = 10;
   var SEARCH_DEBOUNCE_MS = 250;
   var HIGHLIGHT_LENGTH = 300;
+  var HIGHLIGHT_SEPARATOR = '&hellip;';
   var searchOffset = 0;
 
   var $error = $('#error');
@@ -22,12 +23,21 @@ $(document).ready(function() {
 
     var $resultsList = $('<ol />');
     $.each(results, function(i, result) {
+      var linkContent = '';
+      $.each(result.highlights, function(i, highlight) {
+        var newLinkContent = linkContent + HIGHLIGHT_SEPARATOR + highlight;
+        if (newLinkContent.length <= HIGHLIGHT_LENGTH) {
+          linkContent = newLinkContent;
+        }
+      });
+      linkContent = linkContent.substr(HIGHLIGHT_SEPARATOR.length);
+
       $('<li />')
       .appendTo($resultsList)
       .append($('<a />')
         .attr('href', Flask.url_for('document', { 'document_id': result.id }))
         .attr('target', '_blank')
-        .html(result.highlights.join('&hellip;').substr(0, HIGHLIGHT_LENGTH)));
+        .html(linkContent));
     });
 
     $results.html($resultsList.html());
