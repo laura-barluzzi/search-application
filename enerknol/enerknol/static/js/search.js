@@ -1,6 +1,7 @@
 $(document).ready(function() {
   var SEARCH_LIMIT = 10;
   var SEARCH_DEBOUNCE_MS = 250;
+  var HIGHLIGHT_LENGTH = 300;
   var searchOffset = 0;
 
   var $error = $('#error');
@@ -26,7 +27,7 @@ $(document).ready(function() {
       .append($('<a />')
         .attr('href', Flask.url_for('document', { 'document_id': result.id }))
         .attr('target', '_blank')
-        .html(result.highlights[0]));
+        .html(result.highlights.join('&hellip;').substr(0, HIGHLIGHT_LENGTH)));
     });
 
     $results.html($resultsList.html());
