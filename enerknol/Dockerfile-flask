@@ -8,10 +8,10 @@ ADD enerknol/ /app/enerknol
 
 WORKDIR /app
 
-ENV FLASK_CONFIG_DEBUG="True"
-ENV FLASK_CONFIG_SQLALCHEMY_DATABASE_URI="sqlite:////app/test.db"
-ENV FLASK_CONFIG_PASSWORD_SALT="changeme-salt"
-ENV FLASK_CONFIG_SECRET_KEY="changeme-secret-key"
+ENV FLASK_CONFIG_DEBUG=""
+ENV FLASK_CONFIG_SQLALCHEMY_DATABASE_URI=""
+ENV FLASK_CONFIG_PASSWORD_SALT=""
+ENV FLASK_CONFIG_SECRET_KEY=""
 
 CMD ["gunicorn", "--workers=2", "--bind=0.0.0.0:80", "--log-level=debug", "enerknol.app:app"]
 

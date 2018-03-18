@@ -20,7 +20,10 @@ services:
       - mongo:mongo
       - mysql:mysql
     environment:
-      - FLASK_CONFIG_SQLALCHEMY_DATABASE_URI=mysql+cymysql://enerknol:enerknol@mysql:3306/enerknol?charset=utf8
+      - FLASK_CONFIG_DEBUG=${FLASK_CONFIG_DEBUG}
+      - FLASK_CONFIG_PASSWORD_SALT=${FLASK_CONFIG_PASSWORD_SALT}
+      - FLASK_CONFIG_SECRET_KEY=${FLASK_CONFIG_SECRET_KEY}
+      - FLASK_CONFIG_SQLALCHEMY_DATABASE_URI=mysql+cymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/enerknol?charset=utf8
       - FLASK_CONFIG_MONGO_DATABASE_URI=mongodb://mongo:27017/enerknol
       - FLASK_CONFIG_ELASTIC_URI=http://elastic:9200
     ports:
@@ -42,8 +45,8 @@ services:
     image: mysql:5.7
     environment:
       - MYSQL_DATABASE=enerknol
-      - MYSQL_USER=enerknol
-      - MYSQL_PASSWORD=enerknol
-      - MYSQL_ROOT_PASSWORD=root123
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     ports:
       - 3306:3306
