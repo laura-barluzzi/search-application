@@ -2,6 +2,20 @@
   pointer-events: none;
 }
 
+#results {
+  list-style-type: none;
+}
+
+#results li {
+  padding: 15px;
+  margin: 10px;
+  background-color: #e8f4f8;
+}
+
+#results li:hover {
+  border-left: 6px solid #3232ff;
+}
+
 #results li > a > em {
   font-weight: bold;
 }

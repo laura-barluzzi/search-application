@@ -18,9 +18,10 @@
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav">
           {% if current_user.is_authenticated %}
             <li><a href="{{ url_for_security('logout') }}">Logout</a></li>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
           {% else %}
             <li><a href="{{ url_for_security('login') }}">Login</a></li>
             <li><a href="{{ url_for_security('register') }}">Register</a></li>
