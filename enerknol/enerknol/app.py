@@ -29,7 +29,7 @@ app.config.from_object(config)
 jsglue = JSGlue(app)
 
 # from https://goo.gl/v9VnRp
-connections.create_connection(hosts=config.ELASTIC_HOSTS)
+connections.create_connection(hosts=app.config['ELASTIC_HOSTS'])
 
 # from https://goo.gl/U5ktnS and https://goo.gl/EextKx
 models.db.init_app(app)
