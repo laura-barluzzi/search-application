@@ -17,14 +17,16 @@ $(document).ready(function() {
       return;
     }
 
+    console.log(results);
+
     var $resultsList = $('<ol />');
     $.each(results, function(i, result) {
       $('<li />')
       .appendTo($resultsList)
       .append($('<a />')
-        .attr('href', Flask.url_for('document', { 'document_id': result }))
+        .attr('href', Flask.url_for('document', { 'document_id': result.id }))
         .attr('target', '_blank')
-        .text(result));
+        .html(result.highlights[0]));
     });
 
     $results.html($resultsList.html());

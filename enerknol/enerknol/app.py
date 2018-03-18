@@ -113,9 +113,16 @@ def get_search_results(query):
     offset = max(int(request.args.get('offset', '0')), 0)
     limit = min(int(request.args.get('limit', '20')), 100)
 
-    search = Search().source(['id']).query('match', content=query)
+    search = Search()\
+        .source(['id'])\
+        .query('match', content=query)\
+        .highlight('content')
+
     search = search[offset:offset+limit]
-    results = [result.id for result in search.execute()]
+
+    results = [{'id': result.id,
+                'highlights': list(result.meta.highlight.content)}
+               for result in search.execute()]
 
     return jsonify(status='success', results=results), 200
 

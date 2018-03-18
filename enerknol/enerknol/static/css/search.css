@@ -1,3 +1,7 @@
-li.disabled > a {
+.pager li.disabled > a {
   pointer-events: none;
+}
+
+#results li > a > em {
+  font-weight: bold;
 }
