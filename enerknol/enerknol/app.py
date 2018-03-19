@@ -10,7 +10,6 @@ from flask import jsonify
 from flask import render_template
 from flask import request
 from flask_jsglue import JSGlue
-from flask_security import LoginForm
 from flask_security import SQLAlchemyUserDatastore
 from flask_security import Security
 from flask_security import current_user
@@ -35,7 +34,8 @@ connections.create_connection(hosts=app.config['ELASTIC_HOSTS'])
 models.db.init_app(app)
 user_datastore = SQLAlchemyUserDatastore(models.db, models.User, models.Role)
 security = Security(app, user_datastore,
-                    login_form=LoginForm, register_form=forms.RegisterForm)
+                    login_form=forms.LoginForm,
+                    register_form=forms.RegisterForm)
 
 
 # from https://goo.gl/MjecbL
@@ -68,14 +68,14 @@ def setup_database():
     models.db.create_all()
 
     if app.config['TESTING']:
-        test_user_email = app.config['TEST_USER_EMAIL']
+        test_user_name = app.config['TEST_USER_NAME']
         test_user_password = app.config['TEST_USER_PASSWORD']
         test_user_access_token = app.config['TEST_USER_ACCESS_TOKEN']
 
-        user = user_datastore.find_user(email=test_user_email)
+        user = user_datastore.find_user(user_name=test_user_name)
         if not user:
             user_datastore.create_user(
-                email=test_user_email,
+                user_name=test_user_name,
                 password=test_user_password,
                 access_token=test_user_access_token)
             user_datastore.commit()
