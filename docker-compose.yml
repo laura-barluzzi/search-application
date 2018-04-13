@@ -4,16 +4,16 @@ services:
 
   nginx:
     build:
-      context: enerknol
+      context: search_app
       dockerfile: Dockerfile-nginx
     links:
-      - enerknol:enerknol
+      - search_app:search_app
     ports:
       - ${PORT}:80
 
-  enerknol:
+  search_app:
     build:
-      context: enerknol
+      context: search_app
       dockerfile: Dockerfile-flask
     links:
       - elastic:elastic
@@ -24,8 +24,8 @@ services:
       - FLASK_CONFIG_TESTING=${FLASK_CONFIG_TESTING}
       - FLASK_CONFIG_PASSWORD_SALT=${FLASK_CONFIG_PASSWORD_SALT}
       - FLASK_CONFIG_SECRET_KEY=${FLASK_CONFIG_SECRET_KEY}
-      - FLASK_CONFIG_SQLALCHEMY_DATABASE_URI=mysql+cymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/enerknol?charset=utf8
-      - FLASK_CONFIG_MONGO_DATABASE_URI=mongodb://mongo:27017/enerknol
+      - FLASK_CONFIG_SQLALCHEMY_DATABASE_URI=mysql+cymysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/search_app?charset=utf8
+      - FLASK_CONFIG_MONGO_DATABASE_URI=mongodb://mongo:27017/search_app
       - FLASK_CONFIG_ELASTIC_URI=http://elastic:9200
     ports:
       - 5000:80
@@ -45,7 +45,7 @@ services:
   mysql:
     image: mysql:5.7
     environment:
-      - MYSQL_DATABASE=enerknol
+      - MYSQL_DATABASE=search_app
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}

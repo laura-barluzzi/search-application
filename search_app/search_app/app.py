@@ -17,9 +17,9 @@ from flask_security import login_required
 from mongoengine import DoesNotExist
 from mongoengine import ValidationError
 
-from enerknol import config
-from enerknol import forms
-from enerknol import models
+from search_app import config
+from search_app import forms
+from search_app import models
 
 app = Flask(__name__)
 app.config.from_object(config)

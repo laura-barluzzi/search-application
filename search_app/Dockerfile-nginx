@@ -1,6 +1,6 @@
 FROM nginx:mainline
 
-ADD enerknol/static /app/static
+ADD search_app/static /app/static
 ADD nginx.conf /etc/nginx/conf.d/flask.conf
 
 RUN rm /etc/nginx/conf.d/default.conf

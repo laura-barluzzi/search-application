@@ -1,4 +1,4 @@
-# Enerknol
+# Search Application
 
 ## Development setup
 

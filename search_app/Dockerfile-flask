@@ -4,7 +4,7 @@ ADD requirements.txt /app/requirements.txt
 
 RUN pip3 install -r /app/requirements.txt
 
-ADD enerknol/ /app/enerknol
+ADD search_app/ /app/search_app
 
 WORKDIR /app
 
@@ -16,6 +16,6 @@ ENV FLASK_CONFIG_ELASTIC_URI=""
 ENV FLASK_CONFIG_PASSWORD_SALT=""
 ENV FLASK_CONFIG_SECRET_KEY=""
 
-CMD ["gunicorn", "--workers=2", "--bind=0.0.0.0:80", "--log-level=debug", "enerknol.app:app"]
+CMD ["gunicorn", "--workers=2", "--bind=0.0.0.0:80", "--log-level=debug", "search_app.app:app"]
 
 EXPOSE 80
